@@ -33,10 +33,17 @@ public class SearchActivity extends AppCompatActivity {
                     case R.id.search:
                         return true;
 
+                    case R.id.post:
+                        startActivity(new Intent(getApplicationContext(), PostActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+
                     case R.id.profile:
                         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         overridePendingTransition(0,0);
                         return true;
+
                 }
                 return false;
             }

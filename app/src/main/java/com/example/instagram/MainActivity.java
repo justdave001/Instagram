@@ -3,9 +3,15 @@ package com.example.instagram;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,10 +24,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
     public EditText etDescription;
     public Button submitBtn;
     public Button uploadBtn;
+
+
+    public final String APP_TAG = "MyCustomApp";
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public String photoFileName = "photo.jpg";
+    public File photoFile;
+
 
     public void setOnItemSelectedListener(@Nullable NavigationBarView.OnItemSelectedListener listener) {
         selectedListener = listener;
@@ -43,34 +58,26 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.home);
 
-        uploadImg = findViewById(R.id.uploadImg);
-        etDescription = findViewById(R.id.etDescription);
-        submitBtn = findViewById(R.id.submitBtn);
-        uploadBtn = findViewById(R.id.uploadBtn);
-        
-//        queryPost();
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String description = etDescription.getText().toString();
-                if (description.isEmpty()){
-                    Toast.makeText(MainActivity.this, "Put description", Toast.LENGTH_SHORT).show();
-                }
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                savePost(description,currentUser);
 
-            }
-        });
+//        queryPost();
+
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener()  {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.home:
-                             return true;
+                        startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
 
                     case R.id.search:
                         startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.post:
+                        startActivity(new Intent(getApplicationContext(), PostActivity.class));
                         overridePendingTransition(0,0);
                         return true;
 
@@ -83,38 +90,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void savePost(String description, ParseUser currentUser) {
-            Post post = new Post();
-            post.setDescription(description);
-            post.setUser(currentUser);
-            post.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if(e!=null){
-                        Log.e("Savingdescription","error saving",e);
-                        Toast.makeText(MainActivity.this, "Error saving", Toast.LENGTH_SHORT).show();
-                    }
-                    Log.i("Save","Post description successful");
-                    etDescription.setText("");
-                }
-            });
-    }
-
-    private void queryPost() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e!=null){
-                    Log.e("postfailed", "issue with getting posts",e);
-
-                }
-                for (Post post : posts){
-                    Log.i("posts", "Post"+post.getDescription());
-                }
-            }
-        });
-    }
 }
+
+
+
+
+
+

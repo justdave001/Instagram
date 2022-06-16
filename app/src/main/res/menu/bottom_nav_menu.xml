@@ -13,6 +13,11 @@
             android:icon="@drawable/search"
             />
     <item
+        android:id="@+id/post"
+        android:title="post"
+        android:icon="@drawable/post"
+        />
+    <item
         android:id="@+id/profile"
         android:title="profile"
         android:icon="@drawable/profile"

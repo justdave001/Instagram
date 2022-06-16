@@ -46,6 +46,12 @@ public class ProfileActivity extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
 
+                    case R.id.post:
+                        startActivity(new Intent(getApplicationContext(), PostActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+
                     case R.id.profile:
                         return true;
                 }
