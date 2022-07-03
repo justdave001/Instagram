@@ -39,13 +39,13 @@ public class FeedActivity extends AppCompatActivity {
     private void queryPosts() {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        // include data referred by user key
+     
         query.include(Post.KEY_USER);
-        // limit query to latest 20 items
+     
         query.setLimit(20);
-        // order posts by creation date (newest first)
+       
         query.addDescendingOrder("createdAt");
-        // start an asynchronous call for posts
+        
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
